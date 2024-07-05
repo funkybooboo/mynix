@@ -111,6 +111,7 @@
       postgresql_16
       sqlite
       openssl_3_3
+      bruno
     ];
   };
   
@@ -130,6 +131,7 @@
     vim
     git
     tmux
+    home-manager
   ];
   
   # System fonts
