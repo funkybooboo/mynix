@@ -44,9 +44,9 @@
   services.desktopManager.plasma6.enable = true;
 
   # Configure keymap in X11
-  services.xserver = {
+  services.xserver.xkb = {
     layout = "us";
-    xkbVariant = "";
+    variant = "";
   };
 
   # Enable CUPS to print documents.
@@ -62,10 +62,18 @@
     pulse.enable = true;
   };
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  # Allow unfree packages
+  nixpkgs.config.allowUnfree = true;
 
-  # Install firefox.
-  programs.firefox.enable = true;
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  
+  # enable home manager to manager config files of programs
+  home-manager = {
+    extraSpecialArgs = { inherit inputs; };
+    users = {
+      "nates" = import ./home.nix;
+    };
+  };
 
   programs.fish.enable = true;
 
@@ -112,19 +120,9 @@
       sqlite
       openssl_3_3
       bruno
+      firefox
     ];
   };
-  
-  # enable home manager to manager config files of programs
-  home-manager = {
-    extraSpecialArgs = { inherit inputs; };
-    users = {
-      "nates" = import ./home.nix;
-    };
-  };
-
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
 
   # System packages
   environment.systemPackages = with pkgs; [
@@ -132,6 +130,7 @@
     git
     tmux
     home-manager
+    nix-ld
   ];
   
   # System fonts
@@ -139,14 +138,7 @@
     (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
   ];
   fonts.fontconfig.enable = true;
-  
-  # Allow nixos to run dynamically linked axecutables inteanded for generic Linux environment
-  programs.nix-ld.enable = true;
-  programs.nix-ld.libraries = with pkgs; [
-    # Add any missing dynamic libraries for unpackaged 
-    # programs here, NOT in environment.systemPackages
-  ];
- 
+
   # Auto upgrades
   system.autoUpgrade = {
     enable = true;
