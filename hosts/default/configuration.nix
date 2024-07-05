@@ -137,10 +137,28 @@
     (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
   ];
   fonts.fontconfig.enable = true;
-
-  # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
-
+  
+  # Allow nixos to run dynamically linked axecutables inteanded for generic Linux environment
+  programs.nix-ld.enable = true;
+  programs.nix-ld.libraries = with pkgs; [
+    # Add any missing dynamic libraries for unpackaged 
+    # programs here, NOT in environment.systemPackages
+  ];
+ 
+  # Auto upgrades
+  system.autoUpgrade = {
+    enable = true;
+    flake = inputs.self.outPath;
+    flags = [
+      "--update-input"
+      "nixpkgs"
+      "-L" 
+    ];
+    dates = "09:00";
+    randomizedDelaySec = "45min";
+  };
+  
+  # What branch the system is on
   system.stateVersion = "unstable"; 
 
 }
