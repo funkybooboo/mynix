@@ -8,7 +8,6 @@
   imports =
   [
     ./hardware-configuration.nix
-    inputs.home-manager.nixosModules.default
   ];
 
   # Bootloader.
@@ -16,7 +15,7 @@
   boot.loader.efi.canTouchEfiVariables = true;
   
   # Networking.
-  networking.hostName = "nixos";
+  networking.hostName = "debbie";
   networking.networkmanager.enable = true;
   
   # Set up timezone.
@@ -65,16 +64,8 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [ "nix-command" ];
   
-  # enable home manager to manager config files of programs
-  home-manager = {
-    extraSpecialArgs = { inherit inputs; };
-    users = {
-      "nates" = import ./home.nix;
-    };
-  };
-
   programs.fish.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -86,20 +77,16 @@
   shell = pkgs.fish; # user shell
   packages = with pkgs; [ # user packages
       kdePackages.kate
-      thunderbird
       librewolf
       alacritty
       jetbrains-toolbox
       protonvpn-gui
-      protonmail-bridge-gui
       github-desktop
       fish
-      wget
       virtualbox
       discord
       slack
       zoom-us
-      tldr
       glow
       lsd
       docker-client
@@ -108,19 +95,16 @@
       papirus-nord
       gparted
       fastfetch
-      tree
       bat
       htop-vim
       blanket
       pomodoro-gtk
       brave
       obsidian
-      nodejs_20
-      postgresql_16
+      postgresql
       sqlite
-      openssl_3_3
+      openssl
       bruno
-      firefox
     ];
   };
 
@@ -129,8 +113,12 @@
     vim
     git
     tmux
-    home-manager
     nix-ld
+    curl
+    firefox
+    wget
+    tldr
+    tree
   ];
   
   # System fonts
@@ -142,7 +130,6 @@
   # Auto upgrades
   system.autoUpgrade = {
     enable = true;
-    flake = inputs.self.outPath;
     flags = [
       "--update-input"
       "nixpkgs"
