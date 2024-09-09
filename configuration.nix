@@ -1,27 +1,19 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
 { config, pkgs, inputs, ... }:
 
 {
-  imports =
-  [
-    ./hardware-configuration.nix
-  ];
+  # Import hardware configuration
+  imports = [ ./hardware-configuration.nix ];
 
-  # Bootloader.
+  # Bootloader settings
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  
-  # Networking.
+
+  # Networking settings
   networking.hostName = "debbie";
   networking.networkmanager.enable = true;
-  
-  # Set up timezone.
-  time.timeZone = "America/Denver";
 
-  # Select internationalisation properties.
+  # Time and locale settings
+  time.timeZone = "America/Denver";
   i18n.defaultLocale = "en_US.UTF-8";
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "en_US.UTF-8";
@@ -35,23 +27,20 @@
     LC_TIME = "en_US.UTF-8";
   };
 
-  # Enable the X11 windowing system.
+  # X11 and KDE Plasma settings
   services.xserver.enable = true;
-
-  # Enable the KDE Plasma Desktop Environment.
   services.displayManager.sddm.enable = true;
   services.desktopManager.plasma6.enable = true;
 
-  # Configure keymap in X11
   services.xserver.xkb = {
     layout = "us";
     variant = "";
   };
 
-  # Enable CUPS to print documents.
+  # Printing settings
   services.printing.enable = true;
 
-  # Enable sound with pipewire.
+  # Sound settings with PipeWire
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
@@ -59,23 +48,26 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
+    jack.enable = true; # Enable JACK if needed
   };
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
+  # Enable experimental Nix features
   nix.settings.experimental-features = [ "nix-command" ];
-  
+
+  # Fish shell configuration
   programs.fish.enable = true;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.nates = {
-  isNormalUser = true;
-  home = "/home/nates";
-  description = "Nate Stott";
-  extraGroups = [ "networkmanager" "wheel" ];
-  shell = pkgs.fish; # user shell
-  packages = with pkgs; [ # user packages
+  # User account configuration
+  users.users.nate = {
+    isNormalUser = true;
+    home = "/home/nate";
+    description = "Nate Stott";
+    extraGroups = [ "networkmanager" "wheel" ];
+    shell = pkgs.fish;
+    packages = with pkgs; [
       kdePackages.kate
       librewolf
       alacritty
@@ -105,10 +97,13 @@
       sqlite
       openssl
       bruno
+      python312
+      python312Packages.pip
+      python312Packages.pipx
     ];
   };
 
-  # System packages
+  # System-wide packages
   environment.systemPackages = with pkgs; [
     vim
     git
@@ -119,27 +114,34 @@
     wget
     tldr
     tree
+    glances # Add system monitoring tool
   ];
-  
-  # System fonts
+
+  # Font configuration
   fonts.packages = with pkgs; [
     (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
   ];
   fonts.fontconfig.enable = true;
 
-  # Auto upgrades
+  # Automatic system upgrades
   system.autoUpgrade = {
     enable = true;
     flags = [
       "--update-input"
       "nixpkgs"
-      "-L" 
+      "-L"
     ];
     dates = "09:00";
     randomizedDelaySec = "45min";
   };
-  
-  # What branch the system is on
-  system.stateVersion = "unstable"; 
 
+  # Define the system state version
+  system.stateVersion = "unstable";
+
+  # Firewall settings for improved security
+  networking.firewall = {
+    enable = true;
+    allowedTCPPorts = [ 22 80 443 ]; # Allow SSH, HTTP, HTTPS
+    allowedUDPPorts = [ 53 ]; # Allow DNS
+  };
 }
