@@ -14,12 +14,9 @@
         packages = with pkgs; [
             # Terminal and Shell Utilities
             alacritty             # Terminal emulator
-            glances
             bat                   # Syntax highlighting cat
             glow                  # Markdown renderer
             fzf                   # Command-line fuzzy finder
-            vagrant               # Tool for managing virtualized development environments
-            minikube              # Run Kubernetes locally
             make                  # Build automation tool
             cmake                 # Cross-platform build system generator
             gulp                  # Toolkit for automating tasks
@@ -33,9 +30,6 @@
             librewolf             # Privacy-focused web browser
 
             # Development Tools
-            github-desktop
-            act                   # Github actions run locally
-            gitkraken             # Git GUI client
             neovim                # Text editor
 
             # Java Development
@@ -54,20 +48,15 @@
 
             # Rust Development
             rustup                # Rust programming language installer
-            rustc                 # Rust compiler
-            rustfmt               # Rust formatter
 
             # C++ Development
             gcc                   # GNU Compiler Collection
-            gdb                   # GNU Debugger
             clang-tidy            # C++ linter
             clang-format          # Code formatter for C/C++
 
             # JavaScript Development
             nodejs                # JavaScript runtime
             npm                   # Node package manager
-            eslint                # JavaScript linter
-            prettier              # Code formatter
 
             # API Development Tools
             postman               # API testing tool
@@ -76,21 +65,6 @@
             # Docker Tools
             docker                # Container runtime
             docker-compose        # Multi-container Docker applications
-            dive                  # Analyze Docker images
-            hadolint              # Linter for Dockerfiles
-            portainer             # Web UI for managing Docker containers
-            lazydocker            # Simple Docker management UI
-            docker-machine        # Tool for managing Docker hosts
-            kubectl               # Kubernetes command-line tool
-            terraform             # Infrastructure as code tool
-
-            # Database Tools
-            mysql-client          # MySQL command-line client
-            postgresql            # PostgreSQL database
-            redis                 # In-memory data structure store
-            mongodb               # MongoDB database
-            sqlite                # Lightweight database
-            dbeaver               # Universal database management tool
 
             # JetBrains Products
             intellij-idea-ultimate   # Ultimate Edition
